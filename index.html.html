@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Student Grade Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --danger: #e63946;
+            --warning: #fca311;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .header h2 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            font-weight: 600;
+        }
+
+        .card {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        button.secondary {
+            background: var(--gray);
+        }
+
+        button.secondary:hover {
+            background: #5a6268;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px 15px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 1px dashed #ddd;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-upload-label:hover {
+            background: #e9ecef;
+        }
+
+        .file-upload-label i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .grade-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .grade-A { background: #d4edda; color: #155724; }
+        .grade-B { background: #cce7ff; color: #004085; }
+        .grade-C { background: #fff3cd; color: #856404; }
+        .grade-D { background: #f8d7da; color: #721c24; }
+        .grade-F { background: #f5c6cb; color: #721c24; }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .search-box input {
+            padding-left: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Advanced Student Grade Portal</h2>
+            <p>Manage and view academic performance</p>
+        </div>
+
+        <div class="content">
+            <!-- LOGIN -->
+            <div id="loginBox">
+                <h3>Login to Your Account</h3>
+                <div class="card">
+                    <div class="form-group">
+                        <label for="role">Select Role</label>
+                        <select id="role">
+                            <option value="admin">Admin (Lecturer)</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="username">Username / Student ID</label>
+                        <input type="text" id="username" placeholder="Enter your username or Student ID" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" />
+                    </div>
+                    
+                    <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
+                </div>
+                <div class="alert alert-error hidden" id="loginError">
+                    Invalid credentials. Please try again.
+                </div>
+            </div>
+
+            <!-- ADMIN DASHBOARD -->
+            <div id="adminDashboard" class="hidden">
+                <div class="user-info">
+                    <h3>Admin Dashboard</h3>
+                    <button class="secondary" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+                
+                <div class="card">
+                    <h3>Upload Student Grades</h3>
+                    <p>Upload a CSV file with columns: Name, Student ID, Grade</p>
+                    <div class="file-upload">
+                        <input type="file" id="fileInput" accept=".csv" />
+                        <label for="fileInput" class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose CSV File
+                        </label>
+                    </div>
+                    <button onclick="loadCSV()"><i class="fas fa-upload"></i> Upload & Process</button>
+                </div>
+                
+                <div class="card">
+                    <h3>Manage Classes</h3>
+                    <div class="form-group">
+                        <label for="newClass">Add New Class</label>
+                        <input type="text" id="newClass" placeholder="Enter class name (e.g., Psychology 101)" />
+                    </div>
+                    <button onclick="addClass()"><i class="fas fa-plus"></i> Add Class</button>
+                    
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="classSelect">Select Class to View</label>
+                        <select id="classSelect" onchange="showClassGrades()"></select>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Student Grades</h3>
+                    <div class="form-group">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchBox" placeholder="Search by name or ID" onkeyup="searchStudent()" />
+                        </div>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table id="gradeTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Student ID</th>
+                                    <th>Grade</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STUDENT PORTAL -->
+            <div id="studentPortal" class="hidden">
+                <div class="user-info">
+                    <h3>Student Portal</h3>
+                    <button class="secondary" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+                
+                <div class="card">
+                    <h3>Welcome, <span id="studentName"></span>!</h3>
+                    <p>Here are your current grades:</p>
+                    
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Grade</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentGradeTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 MWU Lecturer Grade Portal | Secure Academic Management System</p>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let classes = {};     // Stores class → students mapping
+        let students = {};    // Student login records
+        let currentUser = null;
+
+        // Default admin credentials
+        const adminUser = "admin";
+        const adminPass = "1234";
+
+        // Sample data for demonstration
+        function initializeSampleData() {
+            // Add some sample classes
+            classes["Psychology 101"] = [
+                { name: "John Smith", id: "S001", grade: "A" },
+                { name: "Emily Johnson", id: "S002", grade: "B+" },
+                { name: "Michael Brown", id: "S003", grade: "C" }
+            ];
+            
+            classes["Computer Science 201"] = [
+                { name: "John Smith", id: "S001", grade: "A-" },
+                { name: "Sarah Davis", id: "S004", grade: "B" },
+                { name: "Robert Wilson", id: "S005", grade: "A" }
+            ];
+            
+            // Add student login records
+            students["S001"] = { 
+                name: "John Smith", 
+                password: "S001", 
+                courses: {
+                    "Psychology 101": "A",
+                    "Computer Science 201": "A-"
+                }
+            };
+            
+            students["S002"] = { 
+                name: "Emily Johnson", 
+                password: "S002", 
+                courses: {
+                    "Psychology 101": "B+"
+                }
+            };
+            
+            students["S003"] = { 
+                name: "Michael Brown", 
+                password: "S003", 
+                courses: {
+                    "Psychology 101": "C"
+                }
+            };
+            
+            students["S004"] = { 
+                name: "Sarah Davis", 
+                password: "S004", 
+                courses: {
+                    "Computer Science 201": "B"
+                }
+            };
+            
+            students["S005"] = { 
+                name: "Robert Wilson", 
+                password: "S005", 
+                courses: {
+                    "Computer Science 201": "A"
+                }
+            };
+            
+            // Update class dropdown
+            updateClassDropdown();
+        }
+
+        function login() {
+            const role = document.getElementById("role").value;
+            const user = document.getElementById("username").value.trim();
+            const pass = document.getElementById("password").value;
+            const errorElement = document.getElementById("loginError");
+
+            // Hide any previous error
+            errorElement.classList.add("hidden");
+
+            if (role === "admin") {
+                if (user === adminUser && pass === adminPass) {
+                    currentUser = { role: "admin", username: user };
+                    document.getElementById("loginBox").classList.add("hidden");
+                    document.getElementById("adminDashboard").classList.remove("hidden");
+                    updateClassDropdown();
+                } else {
+                    errorElement.classList.remove("hidden");
+                }
+            } else {
+                if (students[user] && students[user].password === pass) {
+                    currentUser = { role: "student", username: user, name: students[user].name };
+                    document.getElementById("loginBox").classList.add("hidden");
+                    document.getElementById("studentPortal").classList.remove("hidden");
+                    document.getElementById("studentName").innerText = students[user].name;
+                    loadStudentGrades(user);
+                } else {
+                    errorElement.classList.remove("hidden");
+                }
+            }
+            
+            // Clear password field
+            document.getElementById("password").value = "";
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById("adminDashboard").classList.add("hidden");
+            document.getElementById("studentPortal").classList.add("hidden");
+            document.getElementById("loginBox").classList.remove("hidden");
+            
+            // Clear form fields
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+        }
+
+        function addClass() {
+            let className = document.getElementById("newClass").value.trim();
+            if (!className) {
+                alert("Please enter a class name");
+                return;
+            }
+            
+            if (classes[className]) {
+                alert("This class already exists");
+                return;
+            }
+            
+            classes[className] = [];
+            updateClassDropdown();
+            document.getElementById("newClass").value = "";
+            
+            // Show success message
+            showAlert(`Class "${className}" has been added successfully`, "success");
+        }
+
+        function updateClassDropdown() {
+            let dropdown = document.getElementById("classSelect");
+            dropdown.innerHTML = "";
+            
+            Object.keys(classes).forEach(c => {
+                dropdown.innerHTML += `<option value="${c}">${c}</option>`;
+            });
+            
+            // If there are classes, show the first one
+            if (Object.keys(classes).length > 0) {
+                showClassGrades();
+            }
+        }
+
+        function showClassGrades() {
+            const selectedClass = document.getElementById("classSelect").value;
+            const table = document.querySelector("#gradeTable tbody");
+            table.innerHTML = "";
+
+            if (!classes[selectedClass] || classes[selectedClass].length === 0) {
+                table.innerHTML = `<tr><td colspan="4" style="text-align: center;">No students enrolled in this class</td></tr>`;
+                return;
+            }
+
+            classes[selectedClass].forEach(s => {
+                const gradeClass = getGradeClass(s.grade);
+                table.innerHTML += `
+                    <tr>
+                        <td>${s.name}</td>
+                        <td>${s.id}</td>
+                        <td><span class="grade-badge ${gradeClass}">${s.grade}</span></td>
+                        <td>
+                            <button style="width: auto; padding: 5px 10px; margin: 0;" onclick="editGrade('${s.id}', '${selectedClass}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function getGradeClass(grade) {
+            if (grade.includes('A')) return 'grade-A';
+            if (grade.includes('B')) return 'grade-B';
+            if (grade.includes('C')) return 'grade-C';
+            if (grade.includes('D')) return 'grade-D';
+            return 'grade-F';
+        }
+
+        function editGrade(studentId, className) {
+            const newGrade = prompt(`Enter new grade for student ${studentId}:`);
+            if (newGrade) {
+                // Update grade in classes
+                const studentIndex = classes[className].findIndex(s => s.id === studentId);
+                if (studentIndex !== -1) {
+                    classes[className][studentIndex].grade = newGrade.toUpperCase();
+                }
+                
+                // Update grade in students
+                if (students[studentId] && students[studentId].courses[className]) {
+                    students[studentId].courses[className] = newGrade.toUpperCase();
+                }
+                
+                showClassGrades();
+                showAlert(`Grade updated successfully for student ${studentId}`, "success");
+            }
+        }
+
+        function loadCSV() {
+            const file = document.getElementById("fileInput").files[0];
+            if (!file) {
+                alert("Please select a CSV file first");
+                return;
+            }
+
+            const selectedClass = document.getElementById("classSelect").value;
+            if (!selectedClass) {
+                alert("Please select a class first");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const rows = e.target.result.split("\n").filter(row => row.trim() !== "");
+                if (rows.length < 2) {
+                    alert("CSV file is empty or has invalid format");
+                    return;
+                }
+
+                // Clear existing students in this class
+                classes[selectedClass] = [];
+
+                // Skip header row
+                for (let i = 1; i < rows.length; i++) {
+                    const cols = rows[i].split(",");
+                    if (cols.length >= 3) {
+                        let entry = { 
+                            name: cols[0].trim(), 
+                            id: cols[1].trim(), 
+                            grade: cols[2].trim().toUpperCase() 
+                        };
+                        
+                        classes[selectedClass].push(entry);
+                        
+                        // Update student record
+                        if (!students[entry.id]) {
+                            students[entry.id] = { 
+                                name: entry.name, 
+                                password: entry.id, 
+                                courses: {} 
+                            };
+                        }
+                        
+                        students[entry.id].courses[selectedClass] = entry.grade;
+                    }
+                }
+
+                showClassGrades();
+                showAlert(`CSV file processed successfully. Added ${classes[selectedClass].length} students.`, "success");
+                
+                // Reset file input
+                document.getElementById("fileInput").value = "";
+            };
+            reader.readAsText(file);
+        }
+
+        function searchStudent() {
+            const filter = document.getElementById("searchBox").value.toUpperCase();
+            const rows = document.querySelectorAll("#gradeTable tbody tr");
+
+            rows.forEach(row => {
+                const text = row.innerText.toUpperCase();
+                row.style.display = text.includes(filter) ? "" : "none";
+            });
+        }
+
+        function loadStudentGrades(studentID) {
+            let table = document.getElementById("studentGradeTable");
+            table.innerHTML = "";
+            
+            if (!students[studentID] || !students[studentID].courses) {
+                table.innerHTML = `<tr><td colspan="3" style="text-align: center;">No grade information available</td></tr>`;
+                return;
+            }
+            
+            const courses = students[studentID].courses;
+            Object.keys(courses).forEach(course => {
+                const grade = courses[course];
+                const gradeClass = getGradeClass(grade);
+                table.innerHTML += `
+                    <tr>
+                        <td>${course}</td>
+                        <td><span class="grade-badge ${gradeClass}">${grade}</span></td>
+                        <td>${getGradeStatus(grade)}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function getGradeStatus(grade) {
+            if (grade.includes('A') || grade.includes('B')) return 'Passing';
+            if (grade.includes('C')) return 'Needs Improvement';
+            return 'At Risk';
+        }
+
+        function showAlert(message, type) {
+            // Create alert element
+            const alertEl = document.createElement("div");
+            alertEl.className = `alert alert-${type}`;
+            alertEl.textContent = message;
+            
+            // Add to page
+            const content = document.querySelector(".content");
+            content.insertBefore(alertEl, content.firstChild);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                alertEl.remove();
+            }, 5000);
+        }
+
+        // Initialize sample data when page loads
+        window.onload = initializeSampleData;
+    </script>
+</body>
+</html>
