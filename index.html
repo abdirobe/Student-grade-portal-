@@ -132,6 +132,14 @@
             background: #5a6268;
         }
 
+        button.success {
+            background: var(--success);
+        }
+
+        button.success:hover {
+            background: #3aa8c9;
+        }
+
         .hidden {
             display: none;
         }
@@ -266,6 +274,14 @@
             padding-left: 40px;
         }
 
+        .password-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            border-left: 4px solid var(--primary);
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -322,7 +338,37 @@
             <div id="adminDashboard" class="hidden">
                 <div class="user-info">
                     <h3>Admin Dashboard</h3>
-                    <button class="secondary" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    <div>
+                        <button class="success" onclick="showChangePassword()" style="width: auto; margin-right: 10px;">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                        <button class="secondary" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </div>
+                </div>
+
+                <!-- Change Password Section (Hidden by default) -->
+                <div id="changePasswordSection" class="password-section hidden">
+                    <h4><i class="fas fa-key"></i> Change Admin Password</h4>
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" placeholder="Enter current password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" placeholder="Enter new password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm new password" />
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="success" onclick="changeAdminPassword()">
+                            <i class="fas fa-save"></i> Update Password
+                        </button>
+                        <button class="secondary" onclick="hideChangePassword()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="card">
@@ -380,7 +426,37 @@
             <div id="studentPortal" class="hidden">
                 <div class="user-info">
                     <h3>Student Portal</h3>
-                    <button class="secondary" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    <div>
+                        <button class="success" onclick="showStudentChangePassword()" style="width: auto; margin-right: 10px;">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                        <button class="secondary" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </div>
+                </div>
+
+                <!-- Student Change Password Section -->
+                <div id="studentChangePasswordSection" class="password-section hidden">
+                    <h4><i class="fas fa-key"></i> Change Your Password</h4>
+                    <div class="form-group">
+                        <label for="studentCurrentPassword">Current Password</label>
+                        <input type="password" id="studentCurrentPassword" placeholder="Enter current password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="studentNewPassword">New Password</label>
+                        <input type="password" id="studentNewPassword" placeholder="Enter new password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="studentConfirmPassword">Confirm New Password</label>
+                        <input type="password" id="studentConfirmPassword" placeholder="Confirm new password" />
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="success" onclick="changeStudentPassword()">
+                            <i class="fas fa-save"></i> Update Password
+                        </button>
+                        <button class="secondary" onclick="hideStudentChangePassword()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="card">
@@ -416,7 +492,7 @@
 
         // Default admin credentials
         const adminUser = "admin";
-        const adminPass = "1234";
+        let adminPass = "1234";  // Now this can be changed!
 
         // Sample data for demonstration
         function initializeSampleData() {
@@ -478,6 +554,97 @@
             // Update class dropdown
             updateClassDropdown();
         }
+
+        // === PASSWORD CHANGE FUNCTIONS ===
+
+        function showChangePassword() {
+            document.getElementById('changePasswordSection').classList.remove('hidden');
+            // Clear fields
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        function hideChangePassword() {
+            document.getElementById('changePasswordSection').classList.add('hidden');
+        }
+
+        function changeAdminPassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+
+            if (!current || !newPass || !confirmPass) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (current !== adminPass) {
+                alert('Current password is incorrect');
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                alert('New passwords do not match');
+                return;
+            }
+
+            if (newPass.length < 4) {
+                alert('New password must be at least 4 characters long');
+                return;
+            }
+
+            // Update admin password
+            adminPass = newPass;
+            hideChangePassword();
+            showAlert('Admin password updated successfully!', 'success');
+        }
+
+        function showStudentChangePassword() {
+            document.getElementById('studentChangePasswordSection').classList.remove('hidden');
+            // Clear fields
+            document.getElementById('studentCurrentPassword').value = '';
+            document.getElementById('studentNewPassword').value = '';
+            document.getElementById('studentConfirmPassword').value = '';
+        }
+
+        function hideStudentChangePassword() {
+            document.getElementById('studentChangePasswordSection').classList.add('hidden');
+        }
+
+        function changeStudentPassword() {
+            const current = document.getElementById('studentCurrentPassword').value;
+            const newPass = document.getElementById('studentNewPassword').value;
+            const confirmPass = document.getElementById('studentConfirmPassword').value;
+            const studentId = currentUser.username;
+
+            if (!current || !newPass || !confirmPass) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (current !== students[studentId].password) {
+                alert('Current password is incorrect');
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                alert('New passwords do not match');
+                return;
+            }
+
+            if (newPass.length < 4) {
+                alert('New password must be at least 4 characters long');
+                return;
+            }
+
+            // Update student password
+            students[studentId].password = newPass;
+            hideStudentChangePassword();
+            showAlert('Password updated successfully!', 'success');
+        }
+
+        // === ORIGINAL FUNCTIONS (unchanged) ===
 
         function login() {
             const role = document.getElementById("role").value;
@@ -652,7 +819,7 @@
                         if (!students[entry.id]) {
                             students[entry.id] = { 
                                 name: entry.name, 
-                                password: entry.id, 
+                                password: entry.id,  // Default password is student ID
                                 courses: {} 
                             };
                         }
